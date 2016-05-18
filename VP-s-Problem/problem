@@ -1,0 +1,73 @@
+
+The VP of Manufacturing, Silas Grump, calls you down to his large office with a desk on a slightly raised platform.  
+He looks down at you and says, "I heard you can program a little, kid. They sure do pay you computer guru types a 
+lotta bucks!"    Then he says, "But, what can you do for me?  I need a program that when I type in a part number, 
+it will come back with a report on the console like,
+
+There are 11 of Part Number P-33195 in inventory. It is a class C part.  The cost is $24.00.  The value of that 
+inventory is $264.00.  
+
+Or, if I type in a part that ain’t on file, it should tell me that and I’d like to be able to insert it into the 
+list.  I want it to put it exactly into the right spot, so it stays in order. 
+Then, it should keep on asking for more part numbers, until I say I don't want any more.  You know all that info 
+is on the parts.txt file
+After I’m all done and say I don’t want to search for any more part numbers, I’d like a little report telling how 
+many searches, how many were successful and how many new part numbers I added.  And, it should write the file out 
+again, so the additions are saved.  Simple request for a hotshot programmer, ain’t it?”  
+Back in your office you look up the file and find out it contains part number, part class, part on hand balance and 
+part cost.
+
+You also note that it is not in order.  For sorting, you decide to use a shell sort, because every change to the 
+order of parts needs to be reflected in all the other vectors.  You couldn’t do that if you used the sort function 
+from <algorithm> You know you need to copy the file to the directory where your .cpp file will be.  You quickly 
+define the problem and decide that you will need parallel vectors to hold the data and functions to read in the 
+data, sort the vectors, search for the part and then print out the report. 
+
+Search for three part numbers that are on the file and then search for and add the following part numbers:
+	P-10032 C 123 45.00
+	P-32477 A 12 156.00
+	P-41444 D 88 12.00
+
+Functions required:
+// fills vectors
+bool get_data (vector <string>& part_number, vector <char>& part_class, vector <int>& part_ohb, vector <double>& part_cost);
+
+// Does a binary search  
+int bin_search(string key, const vector<string>& part_number);
+
+// Asks user for a part number to search for
+string get_target();
+
+// gets remaining info to add a part number
+void get_more_data(char& class_in,int& part_ohb_in,double& part_cost_in);
+
+// Inserts part number data into vectors into the proper location
+// See book for information on how to write this
+void insert_data (vector <string>& part_number, vector <char>& part_class,     vector <int>& part_ohb, vector <double>& part_cost, 
+string part_in, char class_in, int part_ohb_in, double part_cost_in);
+
+// Displays info on part number
+void display (const vector <string>& part_number, const vector <char>& part_class, const vector <int>& part_ohb, 
+const vector <double>& part_cost, int finder);
+
+// sorts vectors (Calls swapper) 
+void sort (vector <string>& part_number, vector <char>& part_class, vector <int>& part_ohb, vector <double>& part_cost);
+
+// prints search stats
+void print_stats(int searches, int good, int bad);
+
+// writes out file when program ends, so additions are saved to file
+void put_data (const vector <string>& part_number, const vector <char>& part_class, const vector <int>& part_ohb, 
+   const vector <double>& part_cost);
+
+// templated swap function – Swaps two items in a vector of any type
+// Put this BEFORE main()  Called from sort function
+template <class CType>
+void swapper (CType& a, CType & b)
+{
+    CType temp;
+    temp = a;
+    a = b;
+    b= temp;
+}
+
