@@ -1,0 +1,141 @@
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<stdlib.h> 
+#include<time.h> 
+
+using namespace std;
+
+vector<int> v;
+
+/*
+void Check()
+{
+    for(int i = 0; i < 20; i++){
+        cout<<v[i]<<endl;
+    }
+}
+*/
+
+/*
+void Swap(int *a, int *b)
+{
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+*/
+void ShellSort(int n)
+{
+    for (int gap = n / 2; gap > 0; gap /= 2)
+    for (int i = gap; i < n; i++)
+    for (int j = i - gap; j >= 0 && v[j] > v[j + gap]; j -= gap){
+        swap(v[j], v[j + gap]);
+    }
+}
+
+void InitVector()
+{
+    srand(time(NULL)); 
+    for(int i = 1; i <= 5000; i++){
+       int temp = rand();
+    	 v.push_back(temp); 
+    }
+    ShellSort(5000);
+}
+
+int GetSmallest()
+{
+    return v[0];
+}
+
+int GetLargest()
+{
+    return v[4999];
+}
+
+int GetEvensNumber()
+{
+    int evens = 0;
+    for(int i = 0; i < 5000; i++){
+    	 if(v[i]%2 == 0){
+    	     evens++;
+       }
+    }
+    return evens;
+}
+
+int GetOddsNumber()
+{
+    int odds = 0;
+    for(int i = 0; i < 5000; i++){
+    	 if(v[i]%2 == 1){
+    	    odds++;
+       }
+    }
+    return odds;
+}
+
+long long GetTotalValue()
+{
+    long long sum = 0;
+    for(int i = 0; i < 5000; i++){
+    	 sum += v[i];
+    }
+    return sum;
+}
+
+double GetAverageValue()
+{
+    double average = 0.0;
+    for(int i = 0; i < 5000; i++){
+      	average += (double)v[i];
+    }
+    average /= 5000;
+    return average;
+}
+
+int BinarySearch(int len, int goal)
+{
+    int low = 0;
+    int high = len -1;
+    while (low <= high){
+        int middle = (high - low) / 2 + low; 
+        if (v[middle] == goal){
+           return middle;
+        }
+        else if (v[middle] > goal){
+            high = middle - 1;
+        }
+        else{	 
+            low = middle + 1;
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    InitVector();
+
+    cout<<"The smallest number is  "<<GetSmallest()<<endl;
+    cout<<"The largest number is  "<<GetLargest()<<endl;
+    cout<<"The number of evens is  "<<GetEvensNumber()<<endl;
+    cout<<"The number of odds is  "<<GetOddsNumber()<<endl;
+    cout<<"The total of the values is  "<<GetTotalValue()<<endl;
+    cout<<"The average of the values is  "<<GetAverageValue()<<endl;
+    
+    cout<<"Enter an integer: ";
+    int n, ans;
+    cin>>n;
+    ans = BinarySearch(5000, n);
+    if(ans != -1){
+    	 cout<<n<<" was found at position "<<ans<<endl;
+    }
+    else{
+       cout<<"NOT FOUND!"<<endl;
+    }
+
+    return 0;
+}
