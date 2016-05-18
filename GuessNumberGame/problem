@@ -1,0 +1,34 @@
+The program is to let user or the computer play a guessing game. The computer randomly picks
+a number in between 1 and 100, and then for each guess the user or computer makes, the computer
+informs the user whether the guess was too high or too low. The program should start a new guessing
+game when the correct number is selected to end this run.
+Note. 
+1.Put main function head.
+2.Computer should get right number by binary search.
+eg.
+Would you like to (p)lay or watch the (c)omputer play?
+p
+Enter your guess in between 1 and 100.
+45
+Sorry, your guess is too high, try again.
+Enter your guess in between 1 and 100.
+...
+Congrats, you guessed the correct number, 30.
+
+Would you like to (p)lay or watch the (c)omputer play or (q)uit?
+c
+The computer's guess is 50.
+Sorry, your guess is too high, try again.
+The computer's guess is 25.
+Sorry, your guess is too high, try again.
+The computer's guess is 13.
+Sorry, your guess is too low, try again.
+The computer's guess is 19.
+Sorry, your guess is too high, try again.
+The computer's guess is 16.
+Sorry, your guess is too low, try again.
+The computer's guess is 17.
+Congrats, you guessed the correct number, 17.
+
+Would you like to (p)lay or watch the (c)omputer play or (q)uit?
+q
