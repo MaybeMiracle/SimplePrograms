@@ -1,0 +1,4 @@
+Please create 5000 random numbers, and order them by shell sort, then print the smallest 
+number, the largest number,the number of evens, the number of odds, the total 
+of the values, the average of the values.
+Given a number, please tell me whether this number is in our random sets by binary search.
