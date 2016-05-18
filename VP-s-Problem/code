@@ -1,0 +1,237 @@
+#include<iostream>
+#include<iomanip>
+#include<fstream>
+#include<vector>
+#include<stdlib.h>
+#include<cstring>
+#include<direct.h>
+using namespace std;
+
+string input_path;
+string print_stats_path;
+string put_data_path;
+vector<string> split(string str, string pattern)
+{
+    string::size_type pos; 
+    vector<string> result;
+    str += pattern;
+    int size = str.size();
+
+    for(int i = 0; i < size; i++)
+    {
+        pos = str.find(pattern, i);
+        if(pos < size)
+        {
+            string s = str.substr(i, pos-i);
+            result.push_back(s);
+            i = pos + pattern.size() - 1;
+        }
+    }
+    return result;
+}
+
+// templated swap function- Swaps two items in a vector of any type
+// Put this BEFORE main()  Called from sort function
+template<class CType>
+void swapper(CType& a, CType& b)
+{
+    CType temp;
+    temp = a;
+    a = b;
+    b= temp;
+}
+
+// sorts vectors (Calls swapper)
+void shell_sort(vector <string>&part_number, vector <char>&part_class, vector <int>&part_ohb, vector <double>&part_cost)
+{
+	bool flag = true;
+    int i, numLength = part_number.size();
+
+    int d = numLength;
+    while (flag || (d>1)){    // bool flag 
+        flag = false;  //reset flag to 0 to check for
+        // future swaps 
+        d = (d + 1) / 2;
+        for (i = 0; i < (numLength - d); i++){
+           if (part_number[i + d] < part_number[i]){
+                swapper(part_number[i], part_number[i + d]);
+                swapper(part_class[i], part_class[i + d]);
+                swapper(part_ohb[i], part_ohb[i + d]);
+                swapper(part_cost[i], part_cost[i + d]);
+                flag = true;     //tells swap has occurred
+            }
+        }
+    }
+}
+
+// fills vectors
+bool get_data(vector <string>&part_number, vector <char>&part_class, vector <int>&part_ohb, vector <double>&part_cost)
+{
+	ifstream input_file (input_path.c_str());
+	if(!input_file){
+        cout<<"Unable to open parts.txt"<<endl;;
+        return false;
+    }
+    
+    string str;
+    vector<string> v;
+    int num = 0;
+    while (getline(input_file, str)){
+       v = split(str, " ");
+       if(v.size() != 4){
+       	    cout<<"Input is error."<<endl;
+       	    break;
+	   }
+	   int ohb = atoi(v[2].c_str());
+	   double cost = atof(v[3].c_str()); 
+	   part_number.push_back(v[0]);
+	   part_class.push_back(v[1][0]);
+	   part_ohb.push_back(ohb);
+	   part_cost.push_back(cost);
+	   num++;
+    }
+    input_file.close();
+    shell_sort(part_number, part_class, part_ohb, part_cost);
+    return true;
+}
+
+// Does a binary search  
+int bin_search(string key, const vector<string>&part_number)
+{
+	int low = 0;
+    int high = part_number.size() - 1;
+    while (low <= high){
+        int middle = (high - low) / 2 + low; 
+        if (strcmp(part_number[middle].c_str(), key.c_str()) == 0){
+            return middle;
+        }
+        else if (strcmp(part_number[middle].c_str(), key.c_str()) > 0){
+            high = middle - 1;
+        }
+        else{	 
+            low = middle + 1;
+        }
+    }
+    return -1;
+}
+
+// Asks user for a part number to search for
+string get_target()
+{
+	cout<<endl;
+	cout<<"Input end now will end program."<<endl;
+	cout<<"Please input a part number to search for: ";
+	string str;
+	cin>>str;
+	return str;
+}
+
+// gets remaining info to add a part number
+void get_more_data(char&class_in, int&part_ohb_in, double&part_cost_in)
+{
+	cout<<"This part number is not in the inventory!"<<endl; 
+	cout<<"Please input class, ohb, cost like C 123 45.00"<<endl;
+	cout<<"Please input class, ohb, cost: ";
+	cin>>class_in;
+	cin>>part_ohb_in;
+	cin>>part_cost_in;
+}
+
+// Inserts part number data into vectors into the proper location
+void insert_data(vector <string>&part_number, vector <char>&part_class, vector <int>&part_ohb, vector <double>&part_cost, string part_in, char class_in, int part_ohb_in, double part_cost_in)
+{
+	part_number.push_back(part_in);
+	part_class.push_back(class_in);
+	part_ohb.push_back(part_ohb_in);
+	part_cost.push_back(part_cost_in);
+	shell_sort(part_number, part_class, part_ohb, part_cost);
+	cout<<"Succeed to add!"<<endl;
+	cout<<endl;
+}
+
+// Displays info on part number
+void display(const vector <string>&part_number, const vector <char>&part_class, const vector <int>&part_ohb, const vector <double>&part_cost, int finder)
+{
+	string number = part_number[finder];
+	char clas = part_class[finder];
+	int ohb = part_ohb[finder];
+	double cost = part_cost[finder];
+	double sum = cost * ohb;
+	cout<<"There are "<<ohb<<" of Part Number "<<number<<" in inventory. It is a class "<<clas<<" part.  The cost is $"<<cost<<"  The value of that inventory is $"<<sum<<"."<<endl;
+	cout<<endl;
+}
+
+
+// prints search stats
+void print_stats(int searches, int good, int bad)
+{
+	ofstream out_file (print_stats_path.c_str());  
+	out_file<<"There are "<<searches<<" searches, "<<good<<" are successful and "<<bad<<" are inserted."<<endl;
+    out_file.close();
+    cout<<"Succeed to print stats!"<<endl;
+    cout<<endl;
+}
+
+// writes out file when program ends, so additions are saved to file
+void put_data(const vector <string>&part_number, const vector <char>&part_class, const vector <int>&part_ohb, const vector <double>&part_cost)
+{
+	ofstream out_file (put_data_path.c_str());  
+	for(int i = 0; i < part_number.size(); i++){
+		out_file<<part_number[i]<<" "<<part_class[i]<<" "<<part_ohb[i]<<" "<<part_cost[i]<<endl;
+	}	
+    out_file.close();
+    cout<<"Succeed to put data!"<<endl;
+    cout<<endl;
+}
+
+int main()
+{ 
+    char buffer[200];   
+    getcwd(buffer, 200); 
+    cout<<"The path of this program is "<<buffer<<", please copy parts.txt here."<<endl;
+    string path = buffer;   
+    input_path = path + "\\parts.txt";
+    print_stats_path = path + "\\print_stats.txt";
+    put_data_path = path + "\\put_data.txt";
+    
+    vector<string> part_number;
+    vector<char> part_class;
+    vector<int> part_ohb;
+    vector<double> part_cost;
+    
+    if(get_data(part_number, part_class, part_ohb, part_cost) == false){
+    	cout<<"Fail to get data. Please check file."<<endl;
+	}
+	else{
+		int searches = 0;
+		int good = 0;
+		int bad = 0;
+	    while(true){
+		    string key = get_target();
+		    if(strcmp(key.c_str(), "end now") == 0){
+		    	cout<<"Thanks for your work! Bye-bye!"<<endl;
+		    	break;
+			}
+			searches++;
+		    int finder = bin_search(key, part_number);
+		    if(finder == -1){
+		    	bad++;		    	
+				char clas;
+				int ohb;;
+				double cost;
+				get_more_data(clas, ohb, cost);
+				insert_data(part_number, part_class, part_ohb, part_cost, key, clas, ohb, cost);				
+			}
+			else{
+				good++;
+				display(part_number, part_class, part_ohb, part_cost, finder);
+			}
+	    }
+	    put_data(part_number, part_class, part_ohb, part_cost);
+	    print_stats(searches, good, bad);
+	}
+    return 0;
+}
+
+
+
