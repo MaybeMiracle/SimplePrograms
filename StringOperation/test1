@@ -1,0 +1,141 @@
+/**
+ * cmpsc122 Assignment 3-1 test file
+ * File Name: Assign3_1driver.cpp
+ *
+ * Description: This program demonstrates a very basic String class.  It creates
+ * a few String objects and sends messages to (i.e., calls methods on)
+ * those objects.
+ *
+ */
+
+
+#include <iostream>
+#include "mystring.h"
+using namespace std;
+
+/* Function Prototypes */
+
+void Display(const String &str1, const String &str2, const String &str3);
+
+
+/*************************** Main Program **************************/
+
+int main()
+{
+    String str1, str2, str3;   // Some string objects.
+    char s[100];               // Used for input.
+    
+    // Print out their initial values...
+    
+    cout << "Initial values:" << endl;
+    Display(str1, str2, str3);
+    
+    // Store some values in them...
+    
+    cout << "\nEnter a value for str1 (no spaces): ";
+    cin >> s;
+    str1.assign(s);
+    
+    cout << "\nEnter a value for str2 (no spaces): ";
+    cin >> s;
+    str2.assign(s);
+    
+    cout << "\nEnter a value for str3 (no spaces): ";
+    cin >> s;
+    str3.assign(s);
+    
+    cout << "\nAfter assignments..." << endl;
+    
+    Display(str1, str2, str3);
+    
+    // Access some elements...
+    
+    int i;
+    
+    cout << "\nEnter which element of str1 to display: ";
+    cin >> i;
+    cout << "Element #" << i << " of str1 is '" << str1.element(i)
+    << "'" << endl;
+    
+    cout << "\nEnter which element of str2 to display: ";
+    cin >> i;
+    cout << "Element #" << i << " of str2 is '" << str2.element(i)
+    << "'" << endl;
+    
+    cout << "\nEnter which element of str3 to display: ";
+    cin >> i;
+    cout << "Element #" << i << " of str3 is '" << str3.element(i)
+    << "'" << endl;
+    
+    // Append some strings...
+    
+    String append_str;
+    
+    cout << "\nEnter a value to append to str1 (no spaces): ";
+    cin >> s;
+    append_str.assign(s);
+    str1.append(append_str);
+    
+    cout << "\nEnter a value to append to str2 (no spaces): ";
+    cin >> s;
+    append_str.assign(s);
+    str2.append(append_str);
+    
+    cout << "\nEnter a value to append to str3 (no spaces): ";
+    cin >> s;
+    append_str.assign(s);
+    str3.append(append_str);
+    
+    cout << "\nAfter appending..." << endl;
+    Display(str1, str2, str3);
+    
+    // Compare some strings...
+    
+    int cmp = str1.compare_to(str2);
+    
+    cout << "\nComparing str1 and str2..." << endl;
+    
+    cout << "\"";
+    str1.print();
+    cout << "\" is ";
+    
+    if (cmp < 0) {
+        cout << "less than";
+    } else if (cmp > 0) {
+        cout << "greater than";
+    } else {
+        cout << "equal to";
+    }
+    
+    cout << " \"";
+    str2.print();
+    cout << "\" " << endl<< "The End"<<endl;
+    
+    return 0;
+}
+
+
+/*
+ * Function Definitions
+ * Description: Display Strings
+ * Input:	3 String objects
+ * Output:	Prints out the value and length of the 3 String objects passed to it
+ */
+
+void Display(const String &str1, const String &str2, const String &str3)
+{
+    cout << "str1 holds \"";
+    str1.print();
+    cout.flush();
+    cout << "\" (length = " << str1.length() << ")" << endl;
+    
+    cout << "str2 holds \"";
+    str2.print();
+    cout.flush();
+    cout << "\" (length = " << str2.length() << ")" << endl;
+    
+    cout << "str3 holds \"";
+    str3.print();
+    cout.flush();
+    cout << "\" (length = " << str3.length() << ")" << endl;
+}
