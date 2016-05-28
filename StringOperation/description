@@ -1,0 +1,9 @@
+/*
+String();
+void assign(const char s[]);
+void append(const String& str);
+int compare_to(const String& str) const;
+void print() const;
+int length() const;
+char element(int i) const;
+*/
