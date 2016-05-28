@@ -1,9 +1,18 @@
 /*
-String();
-void assign(const char s[]);
-void append(const String& str);
-int compare_to(const String& str) const;
-void print() const;
-int length() const;
-char element(int i) const;
+String();//set up an empty string to a default constructor
+String(const char s[]);//initialize the string object by a string s
+void assign(const char s[]);//copy contents of the passed string into the String
+void append(const String& str);//append a string to current string
+String operator +=(const String& str);//append a string to current string
+int compare_to(const String& str) const;//compare string
+bool operator ==(const String& str) const;
+bool operator !=(const String& str) const;
+bool operator >(const String& str) const;
+bool operator <(const String& str) const;
+void print(ostream& out) const;//print object
+void print() const;//print string
+friend ostream& operator <<(ostream&, const String&);//overloading output
+int length() const;//return the length of string
+char element(int i) const;//return the i-th element of the string
+char operator [](int i) const;//return the i-th element of the string
 */
